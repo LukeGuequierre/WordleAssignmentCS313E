@@ -191,7 +191,6 @@ def get_feedback(secret_word, guessed_word):
             feedback[i] = CORRECT_COLOR
             alr_guessed.append(letter)
         elif letter in secret_word:
-            print(alr_guessed)
             for l in range(NUM_LETTERS):
                 if secret_word[l] == letter:
                     instances += 1
