@@ -132,9 +132,10 @@ def prepare_game():
             seed = int(sys.argv[1])
             random.seed(seed)
             secret_word = random.choice(valid_words)
-    elif len(sys.argv) != 0:
-        if len(sys.argv) > 2 or len(sys.argv[1]) != NUM_LETTERS:
+    elif len(sys.argv) > 1:
+        if len(sys.argv) > 2:
             raise ValueError
+            #or len(sys.argv[1]) != NUM_LETTERS
     else:
         secret_word = "hello"
 
