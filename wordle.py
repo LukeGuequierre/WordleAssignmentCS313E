@@ -123,6 +123,9 @@ def prepare_game():
     with open("valid_guesses.txt", "r", encoding="ascii") as valid_nonsecret_words:
         valid_words = [word.rstrip() for word in valid_nonsecret_words.readlines()]
 
+    with open("secret_words.txt", "r", encoding="ascii") as secret_nonsecret_words:
+        secret_words = [word.rstrip() for word in secret_nonsecret_words.readlines()]
+
     # Modify this if statement! This is just starter code.
     if len(sys.argv) == 2:
         string_bool = isinstance(sys.argv[1], str)
@@ -131,13 +134,12 @@ def prepare_game():
         else:
             seed = int(sys.argv[1])
             random.seed(seed)
-            secret_word = random.choice(valid_words)
+            secret_word = random.choice(secret_words)
     elif len(sys.argv) > 1:
-        if len(sys.argv) > 2:
+        if len(sys.argv) > 2 or len(sys.argv[1]) != NUM_LETTERS:
             raise ValueError
-            #or len(sys.argv[1]) != NUM_LETTERS
     else:
-        secret_word = "hello"
+        secret_word = "llama"
 
     # You do not have to change this return statement
     return secret_word, valid_words
@@ -183,7 +185,7 @@ def get_feedback(secret_word, guessed_word):
     # Modify this! This is just starter code.
     letter = ''
     secret_letter = ''
-    alr_guessed = []
+    guessed = {}
     for i in range(NUM_LETTERS):
         instances = 0
         count = 0
@@ -191,15 +193,23 @@ def get_feedback(secret_word, guessed_word):
         secret_letter = secret_word[i]
         if letter == secret_letter:
             feedback[i] = CORRECT_COLOR
-            alr_guessed.append(letter)
+            if letter not in guessed:
+                guessed[letter] = 1
+            else:
+                guessed[letter] += 1
         elif letter in secret_word:
             for l in range(NUM_LETTERS):
                 if secret_word[l] == letter:
                     instances += 1
-            for guess in alr_guessed:
-                if guess == letter:
+                if guessed_word[l] == letter:
                     count += 1
-            if letter not in alr_guessed or count <= instances:
+            if letter in guessed:
+                print(guessed[letter], instances, count)
+                if guessed[letter] > instances or count <= instances:
+                    feedback[i] = WRONG_SPOT_COLOR
+                else:
+                    feedback[i] = NOT_IN_WORD_COLOR
+            else:
                 feedback[i] = WRONG_SPOT_COLOR
         else:
             feedback[i] = NOT_IN_WORD_COLOR
