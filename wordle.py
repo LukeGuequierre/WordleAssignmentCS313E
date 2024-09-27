@@ -204,7 +204,6 @@ def get_feedback(secret_word, guessed_word):
                 if guessed_word[l] == letter:
                     count += 1
             if letter in guessed:
-                print(guessed[letter], instances, count)
                 if guessed[letter] > instances or count <= instances:
                     feedback[i] = WRONG_SPOT_COLOR
                 else:
